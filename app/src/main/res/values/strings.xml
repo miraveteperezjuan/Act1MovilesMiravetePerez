@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Act1MiraveteJuan</string>
+    <string name="indique_el_n_mero_de_hijos_as">Introduzca el número de hijos/as:</string>
+    <string name="introduce_su_salario_anual">Introduzca su salario anual:</string>
+    <string name="indique_su_grupo_profesional">Introduzca su grupo profesional:</string>
+    <string name="auxiliar_administrativo">Auxiliar administrativo</string>
+    <string name="soltero_a">Soltero/a</string>
+    <string name="indique_su_estado_civil">Introduzca su estado civil:</string>
+    <string name="indique_su_grado_de_discapacidad">Indique su grado de discapacidad:</string>
+    <string name="introduzca_su_edad">Introduzca su edad:</string>
+    <string name="introduzca_el_n_mero_de_pagas">Introduzca el número de pagas:</string>
+    <string name="Intro">Introduce tus datos para calcular la retención fiscal correspondiente a tu situación. Tu información será tratada de forma segura y confidencial.</string>
+    <string name="calcular">Calcular</string>
+    <string name="comenzar">Comenzar</string>
+    <string name="Text_Intro">Bankinter ofrece soluciones financieras diseñadas para ayudarte a gestionar y hacer crecer tu patrimonio. Con cuentas corrientes y de ahorro con ventajas en intereses y comisiones, una variedad de productos de inversión, y asesoramiento personalizado, puedes encontrar opciones adaptadas a tus necesidades. Además, gracias a sus herramientas digitales, puedes manejar tus finanzas cómodamente desde cualquier lugar. ¡Dale a comenzar para saber cuál es tu retención de IRPF!</string>
+    <string name="tu_resultado_es_el_siguiente">Tu resultado es el siguiente:</string>
+
+</resources>
