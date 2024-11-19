@@ -10,6 +10,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    // Declaración de variables privadas para los elementos visuales
+    private lateinit var salario: EditText
+    private lateinit var pagas: EditText
+    private lateinit var edad: EditText
+    private lateinit var grupoProfesional: EditText
+    private lateinit var discapacidad: EditText
+    private lateinit var estado: EditText
+    private lateinit var hijos: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,80 +31,93 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        initComponents()
+        initListeners()
+    }
+
+    private fun initComponents() {
+        // Inicialización de componentes visuales
+        salario = findViewById(R.id.TextNumberSalario)
+        pagas = findViewById(R.id.textNumberPagas2)
+        edad = findViewById(R.id.textNumberEdad)
+        grupoProfesional = findViewById(R.id.editTextGrupoProfesional)
+        discapacidad = findViewById(R.id.editDiscapacidad)
+        estado = findViewById(R.id.estadoCivil)
+        hijos = findViewById(R.id.textHijo)
+    }
+
+    private fun initListeners() {
+        // Configuración de eventos
         findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.loginButton).setOnClickListener {
-            val salario = findViewById<EditText>(R.id.TextNumberSalario)
-            val pagas = findViewById<EditText>(R.id.textNumberPagas2)
-            val edad = findViewById<EditText>(R.id.textNumberEdad)
-            val grupoProfesional = findViewById<EditText>(R.id.editTextGrupoProfesional)
-            val discapacidad = findViewById<EditText>(R.id.editDiscapacidad)
-            val estado = findViewById<EditText>(R.id.estadoCivil)
-            val hijos = findViewById<EditText>(R.id.textHijo)
-
-            if (salario.text.isNotEmpty() && pagas.text.isNotEmpty() && edad.text.isNotEmpty() &&
-                grupoProfesional.text.isNotEmpty() && discapacidad.text.isNotEmpty() && estado.text.isNotEmpty()
-                && hijos.text.isNotEmpty()) {
-
-                val salarioBruto = salario.text.toString().toDouble()
-                val numeroPagas = pagas.text.toString().toInt()
-                val edadUsuario = edad.text.toString().toInt()
-                val grupoProfesionalText = grupoProfesional.text.toString()
-                val discapacidadPorcentaje = discapacidad.text.toString().toDouble()
-                val estadoCivil = estado.text.toString()
-                val numHijos = hijos.text.toString().toInt()
-
-                val retencionBase = when {
-                    salarioBruto > 60000 -> 0.45
-                    salarioBruto > 30000 -> 0.37
-                    salarioBruto > 12000 -> 0.20
-                    else -> 0.10
-                }
-
-                val numPagas = pagas.text.toString().toInt()
-                val salarioBrutoAjustado =
-                    if (numPagas == 14) {
-                    salarioBruto * 14
-                } else {
-                    salarioBruto * 12
-                }
-
-                val reduccionTotal = (numHijos * 0.02) +
-                        (if (discapacidadPorcentaje > 0) 0.05 else 0.0) +
-                        (if (edadUsuario >= 65) 0.03 else 0.0) +
-                        (if (estadoCivil.equals("casado", ignoreCase = true)) 0.02 else 0.0)
-
-                val retencionIRPFAdjusted = maxOf(retencionBase - reduccionTotal, 0.0)
-                val salarioNetoAjustado = salarioBrutoAjustado * (1 - retencionIRPFAdjusted)
-
-                val intent = Intent(this, ResultBankActivity::class.java).apply {
-                    putExtra("salarioBruto", salarioBrutoAjustado)
-                    putExtra("retencionIRPF", retencionIRPFAdjusted)
-                    putExtra("salarioNeto", salarioNetoAjustado)
-                }
-
-                startActivity(intent)
-
+            if (validateInputs()) {
+                calculateAndNavigate()
             } else {
-                salario.setTextColor(Color.RED)
-                salario.setText("Debes indicar el salario")
-
-                pagas.setTextColor(Color.RED)
-                pagas.setText("Debes rellenar cuantas pagas te dan")
-
-                edad.setTextColor(Color.RED)
-                edad.setText("Debes rellenar indicar tu edad")
-
-                grupoProfesional.setTextColor(Color.RED)
-                grupoProfesional.setText("Debes rellenar el grupo social al que perteneces")
-
-                discapacidad.setTextColor(Color.RED)
-                discapacidad.setText("Debes rellenar el grado de discapacidad")
-
-                estado.setTextColor(Color.RED)
-                estado.setText("Debes rellenar tu estado civil")
-
-                hijos.setTextColor(Color.RED)
-                hijos.setText("Debes indicar el número de hijos")
+                displayErrors()
             }
         }
     }
+
+    private fun validateInputs(): Boolean {
+        // Validación de campos
+        return salario.text.isNotEmpty() && pagas.text.isNotEmpty() && edad.text.isNotEmpty() &&
+                grupoProfesional.text.isNotEmpty() && discapacidad.text.isNotEmpty() &&
+                estado.text.isNotEmpty() && hijos.text.isNotEmpty()
+    }
+
+    private fun calculateAndNavigate() {
+        // Recogida de datos
+        val salarioBruto = salario.text.toString().toDouble()
+        val numeroPagas = pagas.text.toString().toInt()
+        val edadUsuario = edad.text.toString().toInt()
+        val grupoProfesionalText = grupoProfesional.text.toString()
+        val discapacidadPorcentaje = discapacidad.text.toString().toDouble()
+        val estadoCivil = estado.text.toString()
+        val numHijos = hijos.text.toString().toInt()
+
+        // Cálculo de retenciones
+        val retencionBase = when {
+            salarioBruto > 60000 -> 0.45
+            salarioBruto > 30000 -> 0.37
+            salarioBruto > 12000 -> 0.20
+            else -> 0.10
+        }
+
+        val salarioBrutoAjustado = salarioBruto * if (numeroPagas == 14) 14 else 12
+
+        val reduccionTotal = (numHijos * 0.02) +
+                (if (discapacidadPorcentaje > 0) 0.05 else 0.0) +
+                (if (edadUsuario >= 65) 0.03 else 0.0) +
+                (if (estadoCivil.equals("casado", ignoreCase = true)) 0.02 else 0.0)
+
+        val retencionIRPFAdjusted = maxOf(retencionBase - reduccionTotal, 0.0)
+        val salarioNetoAjustado = salarioBrutoAjustado * (1 - retencionIRPFAdjusted)
+
+        // Navegación a la siguiente actividad
+        val intent = Intent(this, ResultBankActivity::class.java).apply {
+            putExtra("salarioBruto", salarioBrutoAjustado)
+            putExtra("retencionIRPF", retencionIRPFAdjusted)
+            putExtra("salarioNeto", salarioNetoAjustado)
+        }
+        startActivity(intent)
+    }
+
+    private fun displayErrors() {
+        // Mostrar errores en los campos vacíos
+        salario.setErrorIfEmpty("Debes indicar el salario")
+        pagas.setErrorIfEmpty("Debes rellenar cuántas pagas te dan")
+        edad.setErrorIfEmpty("Debes indicar tu edad")
+        grupoProfesional.setErrorIfEmpty("Debes rellenar el grupo profesional")
+        discapacidad.setErrorIfEmpty("Debes indicar el grado de discapacidad")
+        estado.setErrorIfEmpty("Debes rellenar tu estado civil")
+        hijos.setErrorIfEmpty("Debes indicar el número de hijos")
+    }
+
+    // Extensión para simplificar la configuración de errores
+    private fun EditText.setErrorIfEmpty(message: String) {
+        if (this.text.isEmpty()) {
+            this.setTextColor(Color.RED)
+            this.setText(message)
+        }
+    }
 }
+
