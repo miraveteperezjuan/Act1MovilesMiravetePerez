@@ -92,13 +92,21 @@ class MainActivity : AppCompatActivity() {
         val retencionIRPFAdjusted = maxOf(retencionBase - reduccionTotal, 0.0)
         val salarioNetoAjustado = salarioBrutoAjustado * (1 - retencionIRPFAdjusted)
 
-        // Navegación a la siguiente actividad
-        val intent = Intent(this, ResultBankActivity::class.java).apply {
-            putExtra("salarioBruto", salarioBrutoAjustado)
-            putExtra("retencionIRPF", retencionIRPFAdjusted)
-            putExtra("salarioNeto", salarioNetoAjustado)
-        }
-        startActivity(intent)
+        // Llamada al método de navegación
+        navigateToResult(salarioBrutoAjustado, retencionIRPFAdjusted, salarioNetoAjustado)
+    }
+
+    private fun navigateToResult(salarioBruto: Double, retencionIRPF: Double, salarioNeto: Double) {
+        // Creamos el objeto intent
+        val intent = Intent(this, ResultBankActivity::class.java)
+
+        // Añadimos los extras para pasar los valores
+        intent.putExtra("SALARIO_BRUTO_KEY", salarioBruto)
+        intent.putExtra("RETENCION_IRPF_KEY", retencionIRPF)
+        intent.putExtra("SALARIO_NETO_KEY", salarioNeto)
+
+        // Iniciamos la actividad
+        this.startActivity(intent)
     }
 
     private fun displayErrors() {
@@ -120,4 +128,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
