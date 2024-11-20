@@ -20,9 +20,9 @@ class ResultBankActivity : AppCompatActivity() {
         }
 
         // Recoger los datos enviados desde MainActivity
-        val salarioBruto = intent.getDoubleExtra("salarioBruto", 0.0)
-        val retencionIRPF = intent.getDoubleExtra("retencionIRPF", 0.0)
-        val salarioNeto = intent.getDoubleExtra("salarioNeto", 0.0)
+        val salarioBruto = intent.getDoubleExtra("SALARIO_BRUTO_KEY", 0.0)
+        val retencionIRPF = intent.getDoubleExtra("RETENCION_IRPF_KEY", 0.0)
+        val salarioNeto = intent.getDoubleExtra("SALARIO_NETO_KEY", 0.0)
 
         // Referencias a los TextViews en el layout
         val salarioBrutoTV = findViewById<TextView>(R.id.salarioBrutoTextView)
